@@ -17,7 +17,7 @@ npm install @alexbosworth/formulas
 Import the named `evaluateFormula` function and pass it a formula string:
 
 ```js
-const {evaluateFormula} = require('formulas');
+const {evaluateFormula} = require('@alexbosworth/formulas');
 
 const {result} = evaluateFormula({
   formula: '1 + 2 * 3',
@@ -51,7 +51,7 @@ Pass constants as finite numbers, booleans, or strings. Constant names are
 case-insensitive within formulas.
 
 ```js
-const {evaluateFormula} = require('formulas');
+const {evaluateFormula} = require('@alexbosworth/formulas');
 
 const {result} = evaluateFormula({
   constants: {
@@ -71,7 +71,7 @@ are case-insensitive within formulas, and each argument is evaluated before
 the JavaScript function is called.
 
 ```js
-const {evaluateFormula} = require('formulas');
+const {evaluateFormula} = require('@alexbosworth/formulas');
 
 const {result} = evaluateFormula({
   constants: {
@@ -105,7 +105,7 @@ the following operators:
 Not-equal comparisons use spreadsheet-style `<>` syntax:
 
 ```js
-const {evaluateFormula} = require('formulas');
+const {evaluateFormula} = require('@alexbosworth/formulas');
 
 const {result} = evaluateFormula({formula: '3 <> 2'});
 
@@ -130,7 +130,7 @@ console.log(result); // 1
 For example:
 
 ```js
-const {evaluateFormula} = require('formulas');
+const {evaluateFormula} = require('@alexbosworth/formulas');
 
 const {result} = evaluateFormula({
   constants: {
@@ -150,7 +150,7 @@ Invalid syntax, unknown names, unsupported values, invalid argument counts,
 and non-finite results cause `evaluateFormula` to throw an `Error`.
 
 ```js
-const {evaluateFormula} = require('formulas');
+const {evaluateFormula} = require('@alexbosworth/formulas');
 
 try {
   evaluateFormula({formula: '1 / 0'});
