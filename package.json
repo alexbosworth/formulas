@@ -1,0 +1,28 @@
+{
+  "author": {
+    "name": "Alex Bosworth",
+    "url": "https://twitter.com/alexbosworth"
+  },
+  "bugs": {
+    "url": "https://github.com/alexbosworth/formulas"
+  },
+  "description": "spreadsheet-style formulas library",
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "spreadsheet",
+    "formulas"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "formulas",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexbosworth/formulas.git"
+  },
+  "scripts": {
+    "test": "node --experimental-test-coverage --test"
+  },
+  "version": "1.0.0"
+}
