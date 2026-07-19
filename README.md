@@ -9,7 +9,7 @@ Evaluate spreadsheet-style formulas with JavaScript values and functions.
 ## Installation
 
 ```sh
-npm install formulas
+npm install @alexbosworth/formulas
 ```
 
 ## Usage
