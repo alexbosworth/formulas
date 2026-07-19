@@ -16,7 +16,7 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "formulas",
+  "name": "@alexbosworth/formulas",
   "repository": {
     "type": "git",
     "url": "https://github.com/alexbosworth/formulas.git"
