@@ -131,6 +131,40 @@ const tests = [
   },
   {
     args: makeArgs({
+      args: [valueNode(1), valueNode(2), valueNode(3)],
+      call: 'COUNT',
+    }),
+    description: 'COUNT returns count of scalar numbers',
+    expected: makeExpected({result: 3}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode([1, 'two', true, 2])],
+      call: 'COUNT',
+    }),
+    description: 'COUNT returns count of numbers in an array',
+    expected: makeExpected({result: 2}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(1), valueNode([2, 'three']), valueNode(false)],
+      call: 'COUNT',
+    }),
+    description: 'COUNT combines scalar and array arguments',
+    expected: makeExpected({result: 2}),
+  },
+  {
+    args: makeArgs({args: [valueNode([])], call: 'COUNT'}),
+    description: 'COUNT returns zero for an empty array',
+    expected: makeExpected({result: 0}),
+  },
+  {
+    args: makeArgs({args: [], call: 'COUNT'}),
+    description: 'COUNT requires at least one argument',
+    error: 'ExpectedAnArgumentForCountFunctionEvaluation',
+  },
+  {
+    args: makeArgs({
       args: [valueNode(true), {error: 'Unexpected evaluation'}],
       call: 'OR',
     }),

@@ -1,5 +1,6 @@
 const calculateAverage = require('../values').calculateAverage;
 const calculateMedian = require('../values').calculateMedian;
+const countNumbers = require('../values').countNumbers;
 const normalizeResult = require('../values').normalizeResult;
 const roundToPlaces = require('../values').roundToPlaces;
 const toBoolean = require('../values').toBoolean;
@@ -74,6 +75,16 @@ module.exports = ({args, call, evaluate, functions}) => {
     }
 
     return {result: calculateAverage({values: averageValues}).average};
+
+  // Count numeric scalar or array values
+  case 'COUNT':
+    if (!args.length) {
+      throw new Error('ExpectedAnArgumentForCountFunctionEvaluation');
+    }
+
+    const countValues = args.map(evaluate).flatMap(asValues);
+
+    return {result: countNumbers({values: countValues}).count};
 
   // Evaluate and return the branch selected by the condition
   case 'IF':

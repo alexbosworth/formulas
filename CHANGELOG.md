@@ -1,5 +1,9 @@
 # Versions
 
+## 1.2.0
+
+- `evaluateFormula`: Add support for COUNT() function
+
 ## 1.1.0
 
 - `evaluateFormula`: Add support for AVERAGE() and MEDIAN() functions

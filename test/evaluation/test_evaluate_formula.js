@@ -54,6 +54,14 @@ const tests = [
     expected: makeExpected({result: 5}),
   },
   {
+    args: makeArgs({
+      constants: {values: [1, 'two', false, 3]},
+      formula: 'count(values)',
+    }),
+    description: 'Formula counts numbers in array constant',
+    expected: makeExpected({result: 2}),
+  },
+  {
     args: makeArgs({constants: {values: [1, 2]}, formula: 'VALUES'}),
     description: 'Array constant cannot be returned as formula output',
     error: 'ExpectedFormulaOutputAsBooleanOrFiniteNumber',

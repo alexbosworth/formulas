@@ -64,7 +64,7 @@ const {result} = evaluateFormula({
 console.log(result); // 27
 ```
 
-Array constants can be passed to `AVERAGE` and `MEDIAN`:
+Array constants can be passed to `AVERAGE`, `COUNT`, and `MEDIAN`:
 
 ```js
 const {evaluateFormula} = require('@alexbosworth/formulas');
@@ -77,8 +77,9 @@ const {result} = evaluateFormula({
 console.log(result); // 3
 ```
 
-`AVERAGE` accepts one or more scalar or array arguments. `MEDIAN` requires one
-non-empty array. Other built-in functions expect scalar arguments.
+`AVERAGE` and `COUNT` accept one or more scalar or array arguments. `COUNT`
+ignores non-number values. `MEDIAN` requires one non-empty array. Other
+built-in functions expect scalar arguments.
 
 ## Custom functions
 
@@ -135,6 +136,7 @@ console.log(result); // 1
 | `ABS(value)` | Return the absolute value |
 | `AND(value, ...)` | Return true when every value is true |
 | `AVERAGE(value, ...)` | Return the average of scalar or array values |
+| `COUNT(value, ...)` | Count numeric scalar or array values |
 | `IF(condition, ifTrue, ifFalse)` | Return the selected result |
 | `MAX(value, ...)` | Return the largest value |
 | `MEDIAN(values)` | Return the median value from an array |
