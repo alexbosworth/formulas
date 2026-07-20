@@ -38,6 +38,27 @@ const tests = [
     expected: makeExpected({result: 5}),
   },
   {
+    args: makeArgs({
+      constants: {values: [7, 1, 4, 2]},
+      formula: 'median(values)',
+    }),
+    description: 'Formula finds median of array constant',
+    expected: makeExpected({result: 3}),
+  },
+  {
+    args: makeArgs({
+      constants: {values: [2, 10, 3]},
+      formula: 'average(values)',
+    }),
+    description: 'Formula finds average of array constant',
+    expected: makeExpected({result: 5}),
+  },
+  {
+    args: makeArgs({constants: {values: [1, 2]}, formula: 'VALUES'}),
+    description: 'Array constant cannot be returned as formula output',
+    error: 'ExpectedFormulaOutputAsBooleanOrFiniteNumber',
+  },
+  {
     args: makeArgs({formula: 'DOUBLE(4)', functions: {double}}),
     description: 'Formula is evaluated with functions',
     expected: makeExpected({result: 8}),

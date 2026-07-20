@@ -32,9 +32,34 @@ const tests = [
     expected: makeExpected({normalized: {NUMBER: 1, BOOL: true}}),
   },
   {
+    args: makeArgs({constants: {values: [1, true, 'foo']}}),
+    description: 'Array constants are normalized as expected',
+    expected: makeExpected({normalized: {VALUES: [1, true, 'foo']}}),
+  },
+  {
+    args: makeArgs({constants: {values: []}}),
+    description: 'Empty array constants are normalized as expected',
+    expected: makeExpected({normalized: {VALUES: []}}),
+  },
+  {
     args: makeArgs({constants: {foo: Infinity}}),
     description: 'Infinite number constants are rejected',
     error: 'ExpectedValidBoolStringOrFiniteNumberConstantValue',
+  },
+  {
+    args: makeArgs({constants: {values: [1, Infinity]}}),
+    description: 'Infinite values in constant arrays are rejected',
+    error: 'ExpectedValidValuesInConstantArray',
+  },
+  {
+    args: makeArgs({constants: {values: [[1]]}}),
+    description: 'Nested constant arrays are rejected',
+    error: 'ExpectedValidValuesInConstantArray',
+  },
+  {
+    args: makeArgs({constants: {values: Array(2)}}),
+    description: 'Sparse constant arrays are rejected',
+    error: 'ExpectedValidValuesInConstantArray',
   },
 ];
 

@@ -87,6 +87,50 @@ const tests = [
   },
   {
     args: makeArgs({
+      args: [valueNode(2), valueNode(4), valueNode(6)],
+      call: 'AVERAGE',
+    }),
+    description: 'AVERAGE returns average of scalar arguments',
+    expected: makeExpected({result: 4}),
+  },
+  {
+    args: makeArgs({args: [valueNode([2, 10, 3])], call: 'AVERAGE'}),
+    description: 'AVERAGE returns average of an array argument',
+    expected: makeExpected({result: 5}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(1), valueNode([3, 5])],
+      call: 'AVERAGE',
+    }),
+    description: 'AVERAGE combines scalar and array arguments',
+    expected: makeExpected({result: 3}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(false), valueNode(true)],
+      call: 'AVERAGE',
+    }),
+    description: 'AVERAGE converts boolean arguments to numbers',
+    expected: makeExpected({result: 0.5}),
+  },
+  {
+    args: makeArgs({args: [], call: 'AVERAGE'}),
+    description: 'AVERAGE requires at least one argument',
+    error: 'ExpectedAnArgumentForAverageFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode([])], call: 'AVERAGE'}),
+    description: 'AVERAGE rejects an empty array',
+    error: 'ExpectedValuesForAverageFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode(['one'])], call: 'AVERAGE'}),
+    description: 'AVERAGE rejects non-numeric values',
+    error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
+  },
+  {
+    args: makeArgs({
       args: [valueNode(true), {error: 'Unexpected evaluation'}],
       call: 'OR',
     }),
@@ -141,6 +185,49 @@ const tests = [
     args: makeArgs({args: [], call: 'MAX'}),
     description: 'MAX requires at least one argument',
     error: 'ExpectedAtLeastOneArgumentForMaxFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode([2, 10, 3])], call: 'MEDIAN'}),
+    description: 'MEDIAN returns middle value from odd array',
+    expected: makeExpected({result: 3}),
+  },
+  {
+    args: makeArgs({args: [valueNode([4, 1, 3, 2])], call: 'MEDIAN'}),
+    description: 'MEDIAN averages middle values from even array',
+    expected: makeExpected({result: 2.5}),
+  },
+  {
+    args: makeArgs({args: [valueNode([false, true, true])], call: 'MEDIAN'}),
+    description: 'MEDIAN converts boolean array values to numbers',
+    expected: makeExpected({result: 1}),
+  },
+  {
+    args: makeArgs({args: [], call: 'MEDIAN'}),
+    description: 'MEDIAN rejects no arguments',
+    error: 'ExpectedAnArgumentForMedianFunctionEvaluation',
+  },
+  {
+    args: makeArgs({
+      args: [valueNode([1]), valueNode([2])],
+      call: 'MEDIAN',
+    }),
+    description: 'MEDIAN rejects more than one argument',
+    error: 'ExpectedAtMostOneArgumentForMedianFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode(1)], call: 'MEDIAN'}),
+    description: 'MEDIAN rejects a non-array argument',
+    error: 'ExpectedArrayForMedianFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode([])], call: 'MEDIAN'}),
+    description: 'MEDIAN rejects an empty array',
+    error: 'ExpectedNonEmptyArrayForMedianFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode([1, 'two'])], call: 'MEDIAN'}),
+    description: 'MEDIAN rejects non-numeric array values',
+    error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
   },
   {
     args: makeArgs({

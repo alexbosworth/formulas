@@ -1,15 +1,20 @@
+const calculateAverage = require('../values').calculateAverage;
+const calculateMedian = require('../values').calculateMedian;
 const normalizeResult = require('../values').normalizeResult;
 const roundToPlaces = require('../values').roundToPlaces;
 const toBoolean = require('../values').toBoolean;
 const toNumber = require('../values').toNumber;
 
 const {abs} = Math;
+const {isArray} = Array;
 const asBool = value => toBoolean({value}).bool;
 const asNumber = value => toNumber({value}).number;
+const asValues = value => isArray(value) ? value : [value];
 const defaultNumPlaces = 0;
 const expectedAbsArgumentsCount = 1;
 const expectedNotArgumentsCount = 1;
 const expectedIfArgumentsCount = 3;
+const expectedMaxMedianArgumentsCount = 1;
 const expectedMaxRoundArgumentsCount = 2;
 const expectedRandBetweenArgumentsCount = 2;
 const {floor} = Math;
@@ -56,6 +61,20 @@ module.exports = ({args, call, evaluate, functions}) => {
 
     return {result: args.every(n => asBool(evaluate(n)))};
 
+  // Return the average of scalar or array values
+  case 'AVERAGE':
+    if (!args.length) {
+      throw new Error('ExpectedAnArgumentForAverageFunctionEvaluation');
+    }
+
+    const averageValues = args.map(evaluate).flatMap(asValues).map(asNumber);
+
+    if (!averageValues.length) {
+      throw new Error('ExpectedValuesForAverageFunctionEvaluation');
+    }
+
+    return {result: calculateAverage({values: averageValues}).average};
+
   // Evaluate and return the branch selected by the condition
   case 'IF':
     if (args.length !== expectedIfArgumentsCount) {
@@ -73,6 +92,30 @@ module.exports = ({args, call, evaluate, functions}) => {
     }
 
     return {result: max(...args.map(evaluate).map(asNumber))};
+
+  // Return the median value from an array
+  case 'MEDIAN':
+    if (!args.length) {
+      throw new Error('ExpectedAnArgumentForMedianFunctionEvaluation');
+    }
+
+    if (args.length > expectedMaxMedianArgumentsCount) {
+      throw new Error('ExpectedAtMostOneArgumentForMedianFunctionEvaluation');
+    }
+
+    const [numbers] = args;
+
+    const values = evaluate(numbers);
+
+    if (!isArray(values)) {
+      throw new Error('ExpectedArrayForMedianFunctionEvaluation');
+    }
+
+    if (!values.length) {
+      throw new Error('ExpectedNonEmptyArrayForMedianFunctionEvaluation');
+    }
+
+    return {result: calculateMedian({values: values.map(asNumber)}).median};
 
   // Return the minimum of the passed arguments
   case 'MIN':

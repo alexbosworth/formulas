@@ -47,8 +47,8 @@ A final boolean result is converted to `1` for true or `0` for false.
 
 ## Constants
 
-Pass constants as finite numbers, booleans, or strings. Constant names are
-case-insensitive within formulas.
+Pass constants as finite numbers, booleans, strings, or flat arrays containing
+those values. Constant names are case-insensitive within formulas.
 
 ```js
 const {evaluateFormula} = require('@alexbosworth/formulas');
@@ -63,6 +63,22 @@ const {result} = evaluateFormula({
 
 console.log(result); // 27
 ```
+
+Array constants can be passed to `AVERAGE` and `MEDIAN`:
+
+```js
+const {evaluateFormula} = require('@alexbosworth/formulas');
+
+const {result} = evaluateFormula({
+  constants: {values: [7, 1, 4, 2]},
+  formula: 'MEDIAN(VALUES)',
+});
+
+console.log(result); // 3
+```
+
+`AVERAGE` accepts one or more scalar or array arguments. `MEDIAN` requires one
+non-empty array. Other built-in functions expect scalar arguments.
 
 ## Custom functions
 
@@ -118,8 +134,10 @@ console.log(result); // 1
 | --- | --- |
 | `ABS(value)` | Return the absolute value |
 | `AND(value, ...)` | Return true when every value is true |
+| `AVERAGE(value, ...)` | Return the average of scalar or array values |
 | `IF(condition, ifTrue, ifFalse)` | Return the selected result |
 | `MAX(value, ...)` | Return the largest value |
+| `MEDIAN(values)` | Return the median value from an array |
 | `MIN(value, ...)` | Return the smallest value |
 | `NOT(value)` | Reverse a boolean value |
 | `OR(value, ...)` | Return true when any value is true |
