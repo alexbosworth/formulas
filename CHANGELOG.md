@@ -1,5 +1,9 @@
 # Versions
 
+## 1.3.0
+
+- `evaluateFormula`: Add support for EXACT() function
+
 ## 1.2.0
 
 - `evaluateFormula`: Add support for COUNT() function

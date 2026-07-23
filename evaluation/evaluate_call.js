@@ -8,11 +8,13 @@ const toNumber = require('../values').toNumber;
 
 const {abs} = Math;
 const {isArray} = Array;
+const isString = value => typeof value === 'string';
 const asBool = value => toBoolean({value}).bool;
 const asNumber = value => toNumber({value}).number;
 const asValues = value => isArray(value) ? value : [value];
 const defaultNumPlaces = 0;
 const expectedAbsArgumentsCount = 1;
+const expectedExactArgumentsCount = 2;
 const expectedNotArgumentsCount = 1;
 const expectedIfArgumentsCount = 3;
 const expectedMaxMedianArgumentsCount = 1;
@@ -85,6 +87,20 @@ module.exports = ({args, call, evaluate, functions}) => {
     const countValues = args.map(evaluate).flatMap(asValues);
 
     return {result: countNumbers({values: countValues}).count};
+
+  // Compare two strings using exact case and spacing
+  case 'EXACT':
+    if (args.length !== expectedExactArgumentsCount) {
+      throw new Error('ExpectedExactlyTwoArgumentsForExactFunctionEvaluation');
+    }
+
+    const [leftString, rightString] = args.map(evaluate);
+
+    if ([leftString, rightString].some(value => !isString(value))) {
+      throw new Error('ExpectedStringsForExactFunctionEvaluation');
+    }
+
+    return {result: leftString === rightString};
 
   // Evaluate and return the branch selected by the condition
   case 'IF':

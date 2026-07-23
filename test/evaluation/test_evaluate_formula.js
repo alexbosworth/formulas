@@ -62,6 +62,21 @@ const tests = [
     expected: makeExpected({result: 2}),
   },
   {
+    args: makeArgs({formula: 'not(false)'}),
+    description: 'Formula reverses a boolean value',
+    expected: makeExpected({result: 1}),
+  },
+  {
+    args: makeArgs({formula: 'exact("Formula", "Formula")'}),
+    description: 'Formula identifies an exact string match',
+    expected: makeExpected({result: 1}),
+  },
+  {
+    args: makeArgs({formula: 'exact("Formula", "formula")'}),
+    description: 'Formula identifies a string case difference',
+    expected: makeExpected({result: 0}),
+  },
+  {
     args: makeArgs({constants: {values: [1, 2]}, formula: 'VALUES'}),
     description: 'Array constant cannot be returned as formula output',
     error: 'ExpectedFormulaOutputAsBooleanOrFiniteNumber',

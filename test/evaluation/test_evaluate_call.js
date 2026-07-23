@@ -165,6 +165,43 @@ const tests = [
   },
   {
     args: makeArgs({
+      args: [valueNode('formula'), valueNode('formula')],
+      call: 'EXACT',
+    }),
+    description: 'EXACT returns true for identical strings',
+    expected: makeExpected({result: true}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode('Formula'), valueNode('formula')],
+      call: 'EXACT',
+    }),
+    description: 'EXACT compares string case',
+    expected: makeExpected({result: false}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode('formula '), valueNode('formula')],
+      call: 'EXACT',
+    }),
+    description: 'EXACT compares string spacing',
+    expected: makeExpected({result: false}),
+  },
+  {
+    args: makeArgs({args: [valueNode('formula')], call: 'EXACT'}),
+    description: 'EXACT requires exactly two arguments',
+    error: 'ExpectedExactlyTwoArgumentsForExactFunctionEvaluation',
+  },
+  {
+    args: makeArgs({
+      args: [valueNode('formula'), valueNode(1)],
+      call: 'EXACT',
+    }),
+    description: 'EXACT requires string arguments',
+    error: 'ExpectedStringsForExactFunctionEvaluation',
+  },
+  {
+    args: makeArgs({
       args: [valueNode(true), {error: 'Unexpected evaluation'}],
       call: 'OR',
     }),

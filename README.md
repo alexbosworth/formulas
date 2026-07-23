@@ -137,6 +137,7 @@ console.log(result); // 1
 | `AND(value, ...)` | Return true when every value is true |
 | `AVERAGE(value, ...)` | Return the average of scalar or array values |
 | `COUNT(value, ...)` | Count numeric scalar or array values |
+| `EXACT(string1, string2)` | Compare two strings exactly |
 | `IF(condition, ifTrue, ifFalse)` | Return the selected result |
 | `MAX(value, ...)` | Return the largest value |
 | `MEDIAN(values)` | Return the median value from an array |
@@ -162,6 +163,18 @@ const {result} = evaluateFormula({
 });
 
 console.log(result); // 100
+```
+
+`EXACT` compares string case and spacing:
+
+```js
+const {evaluateFormula} = require('@alexbosworth/formulas');
+
+const {result} = evaluateFormula({
+  formula: 'EXACT("Formula", "formula")',
+});
+
+console.log(result); // 0
 ```
 
 ## Errors
