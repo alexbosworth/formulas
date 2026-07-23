@@ -118,7 +118,14 @@ module.exports = ({args, call, evaluate, functions}) => {
       throw new Error('ExpectedAtLeastOneArgumentForMaxFunctionEvaluation');
     }
 
-    return {result: max(...args.map(evaluate).map(asNumber))};
+    const maxValues = args.map(evaluate).flatMap(asValues).map(asNumber);
+
+    // Return zero when the arguments contain no values
+    if (!maxValues.length) {
+      return {result: Number()};
+    }
+
+    return {result: maxValues.reduce((maximum, value) => max(maximum, value))};
 
   // Return the median value from an array
   case 'MEDIAN':
@@ -150,7 +157,14 @@ module.exports = ({args, call, evaluate, functions}) => {
       throw new Error('ExpectedAtLeastOneArgumentForMinFunctionEvaluation');
     }
 
-    return {result: min(...args.map(evaluate).map(asNumber))};
+    const minValues = args.map(evaluate).flatMap(asValues).map(asNumber);
+
+    // Return zero when the arguments contain no values
+    if (!minValues.length) {
+      return {result: Number()};
+    }
+
+    return {result: minValues.reduce((minimum, value) => min(minimum, value))};
 
   // Return the opposite boolean value of the argument
   case 'NOT':
@@ -209,7 +223,9 @@ module.exports = ({args, call, evaluate, functions}) => {
       throw new Error('ExpectedAtLeastOneArgumentForSumFunctionEvaluation');
     }
 
-    return {result: sumOf(args.map(evaluate).map(asNumber))};
+    const sumValues = args.map(evaluate).flatMap(asValues).map(asNumber);
+
+    return {result: sumOf(sumValues)};
   }
 
   // Evaluate a custom formula function

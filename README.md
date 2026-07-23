@@ -64,22 +64,24 @@ const {result} = evaluateFormula({
 console.log(result); // 27
 ```
 
-Array constants can be passed to `AVERAGE`, `COUNT`, and `MEDIAN`:
+Array constants can be passed to aggregate functions:
 
 ```js
 const {evaluateFormula} = require('@alexbosworth/formulas');
 
 const {result} = evaluateFormula({
-  constants: {values: [7, 1, 4, 2]},
-  formula: 'MEDIAN(VALUES)',
+  constants: {values: [4, 4]},
+  formula: 'SUM(VALUES) > 7',
 });
 
-console.log(result); // 3
+console.log(result); // 1
 ```
 
-`AVERAGE` and `COUNT` accept one or more scalar or array arguments. `COUNT`
-ignores non-number values. `MEDIAN` requires one non-empty array. Other
-built-in functions expect scalar arguments.
+`AVERAGE`, `COUNT`, `MAX`, `MIN`, and `SUM` accept one or more scalar or array
+arguments. `COUNT` ignores non-number values. `COUNT`, `MAX`, `MIN`, and `SUM`
+return zero for empty arrays. `AVERAGE` requires at least one value, and
+`MEDIAN` requires one non-empty array. Other built-in functions expect scalar
+arguments.
 
 ## Custom functions
 
@@ -139,14 +141,14 @@ console.log(result); // 1
 | `COUNT(value, ...)` | Count numeric scalar or array values |
 | `EXACT(string1, string2)` | Compare two strings exactly |
 | `IF(condition, ifTrue, ifFalse)` | Return the selected result |
-| `MAX(value, ...)` | Return the largest value |
+| `MAX(value, ...)` | Return the largest scalar or array value |
 | `MEDIAN(values)` | Return the median value from an array |
-| `MIN(value, ...)` | Return the smallest value |
+| `MIN(value, ...)` | Return the smallest scalar or array value |
 | `NOT(value)` | Reverse a boolean value |
 | `OR(value, ...)` | Return true when any value is true |
 | `RANDBETWEEN(low, high)` | Return a random integer within inclusive bounds |
 | `ROUND(value[, places])` | Round a value; places defaults to zero |
-| `SUM(value, ...)` | Add one or more values |
+| `SUM(value, ...)` | Add scalar or array values |
 
 For example:
 

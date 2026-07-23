@@ -240,6 +240,24 @@ const tests = [
     expected: makeExpected({result: 1}),
   },
   {
+    args: makeArgs({
+      args: [valueNode(3), valueNode([2, true])],
+      call: 'MIN',
+    }),
+    description: 'MIN returns smallest scalar or array value',
+    expected: makeExpected({result: 1}),
+  },
+  {
+    args: makeArgs({args: [valueNode([])], call: 'MIN'}),
+    description: 'MIN returns zero for an empty array',
+    expected: makeExpected({result: 0}),
+  },
+  {
+    args: makeArgs({args: [valueNode(['one'])], call: 'MIN'}),
+    description: 'MIN rejects non-numeric array values',
+    error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
+  },
+  {
     args: makeArgs({args: [], call: 'MIN'}),
     description: 'MIN requires at least one argument',
     error: 'ExpectedAtLeastOneArgumentForMinFunctionEvaluation',
@@ -251,6 +269,24 @@ const tests = [
     }),
     description: 'MAX returns largest argument',
     expected: makeExpected({result: 3}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(3), valueNode([4, true])],
+      call: 'MAX',
+    }),
+    description: 'MAX returns largest scalar or array value',
+    expected: makeExpected({result: 4}),
+  },
+  {
+    args: makeArgs({args: [valueNode([])], call: 'MAX'}),
+    description: 'MAX returns zero for an empty array',
+    expected: makeExpected({result: 0}),
+  },
+  {
+    args: makeArgs({args: [valueNode(['one'])], call: 'MAX'}),
+    description: 'MAX rejects non-numeric array values',
+    error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
   },
   {
     args: makeArgs({args: [], call: 'MAX'}),
@@ -307,6 +343,24 @@ const tests = [
     }),
     description: 'SUM adds all arguments',
     expected: makeExpected({result: 6}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(3), valueNode([1, true])],
+      call: 'SUM',
+    }),
+    description: 'SUM adds scalar and array values',
+    expected: makeExpected({result: 5}),
+  },
+  {
+    args: makeArgs({args: [valueNode([])], call: 'SUM'}),
+    description: 'SUM returns zero for an empty array',
+    expected: makeExpected({result: 0}),
+  },
+  {
+    args: makeArgs({args: [valueNode(['one'])], call: 'SUM'}),
+    description: 'SUM rejects non-numeric array values',
+    error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
   },
   {
     args: makeArgs({args: [], call: 'SUM'}),

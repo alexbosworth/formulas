@@ -62,6 +62,30 @@ const tests = [
     expected: makeExpected({result: 2}),
   },
   {
+    args: makeArgs({
+      constants: {foo: [4, 4]},
+      formula: 'sum(foo) > 7',
+    }),
+    description: 'Formula sums an array constant',
+    expected: makeExpected({result: 1}),
+  },
+  {
+    args: makeArgs({
+      constants: {foo: [2, 5, 3]},
+      formula: 'max(foo)',
+    }),
+    description: 'Formula finds maximum of array constant',
+    expected: makeExpected({result: 5}),
+  },
+  {
+    args: makeArgs({
+      constants: {foo: [2, 5, 3]},
+      formula: 'min(foo)',
+    }),
+    description: 'Formula finds minimum of array constant',
+    expected: makeExpected({result: 2}),
+  },
+  {
     args: makeArgs({formula: 'not(false)'}),
     description: 'Formula reverses a boolean value',
     expected: makeExpected({result: 1}),

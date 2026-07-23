@@ -1,5 +1,9 @@
 # Versions
 
+## 1.4.0
+
+- `evaluateFormula`: Add array support to MAX(), MIN(), and SUM() functions
+
 ## 1.3.0
 
 - `evaluateFormula`: Add support for EXACT() function
