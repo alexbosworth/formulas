@@ -56,6 +56,16 @@ const tests = [
     error: 'ExpectedNonZeroDivisorForFormulaEvaluation',
   },
   {
+    args: makeArgs({node: {left: {value: 2}, op: '^', right: {value: 3}}}),
+    description: 'Exponentiation is evaluated as expected',
+    expected: makeExpected({result: 8}),
+  },
+  {
+    args: makeArgs({node: {left: {value: 0}, op: '^', right: {value: -1}}}),
+    description: 'Exponentiation with a non-finite result is rejected',
+    error: 'ExpectedFinitePowerResultForFormulaEvaluation',
+  },
+  {
     args: makeArgs({node: {left: {value: 2}, op: '>', right: {value: 1}}}),
     description: 'Greater-than comparison is evaluated as expected',
     expected: makeExpected({result: true}),
@@ -86,7 +96,7 @@ const tests = [
     expected: makeExpected({result: true}),
   },
   {
-    args: makeArgs({node: {left: {value: 2}, op: '^', right: {value: 1}}}),
+    args: makeArgs({node: {left: {value: 2}, op: '&', right: {value: 1}}}),
     description: 'Unsupported binary operator is rejected',
     error: 'UnexpectedBinaryOperatorForFormulaEvaluation',
   },

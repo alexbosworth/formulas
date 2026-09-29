@@ -1,5 +1,10 @@
 # Versions
 
+## 1.5.0
+
+- `evaluateFormula`: Add support for CHOOSE(), POWER() function and `^`
+    operator, and RAND()
+
 ## 1.4.0
 
 - `evaluateFormula`: Add array support to MAX(), MIN(), and SUM() functions

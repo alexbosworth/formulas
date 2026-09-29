@@ -1,7 +1,7 @@
 {
   "author": {
     "name": "Alex Bosworth",
-    "url": "https://twitter.com/alexbosworth"
+    "url": "https://x.com/alexbosworth"
   },
   "bugs": {
     "url": "https://github.com/alexbosworth/formulas/issues"
@@ -19,10 +19,10 @@
   "name": "@alexbosworth/formulas",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexbosworth/formulas.git"
+    "url": "git+https://github.com/alexbosworth/formulas.git"
   },
   "scripts": {
     "test": "node --experimental-test-coverage --test"
   },
-  "version": "1.4.0"
+  "version": "1.5.0"
 }

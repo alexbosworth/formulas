@@ -5,6 +5,7 @@ const parsePrimary = require('./parse_primary');
 const additiveOperators = ['+', '-'];
 const comparisonOperators = ['>', '<', '=', '<>', '<=', '>='];
 const defaultDepth = 0;
+const exponentOperators = ['^'];
 const isOp = (ops, t) => !!t && t.type === 'operator' && ops.includes(t.value);
 const maxParseDepth = 100;
 const multiplicativeOperators = ['*', '/'];
@@ -75,13 +76,26 @@ module.exports = ({tokens}) => {
     return parseComparison(depth);
   };
 
+  // Parse exponentiation after prefix operators, as spreadsheets do
+  const parseExponent = depth => {
+    const {node} = parseBinary({
+      depth,
+      consume: cursor.consume,
+      operators: exponentOperators,
+      next: parseUnary,
+      peek: cursor.peek,
+    });
+
+    return node;
+  };
+
   // Parse multiplications and divisions
   const parseMultiplicative = depth => {
     const {node} = parseBinary({
       depth,
       consume: cursor.consume,
       operators: multiplicativeOperators,
-      next: parseUnary,
+      next: parseExponent,
       peek: cursor.peek,
     });
 

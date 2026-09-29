@@ -1,3 +1,4 @@
+const crypto = require('node:crypto');
 const {deepStrictEqual} = require('node:assert').strict;
 const test = require('node:test');
 const {throws} = require('node:assert').strict;
@@ -127,6 +128,69 @@ const tests = [
   {
     args: makeArgs({args: [valueNode(['one'])], call: 'AVERAGE'}),
     description: 'AVERAGE rejects non-numeric values',
+    error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(2), valueNode('a'), valueNode('b'), valueNode('c')],
+      call: 'CHOOSE',
+    }),
+    description: 'CHOOSE returns the value at the index',
+    expected: makeExpected({result: 'b'}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(2.9), valueNode(10), valueNode(20), valueNode(30)],
+      call: 'CHOOSE',
+    }),
+    description: 'CHOOSE truncates the index',
+    expected: makeExpected({result: 20}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(true), valueNode(10), valueNode(20)],
+      call: 'CHOOSE',
+    }),
+    description: 'CHOOSE converts a boolean index to a number',
+    expected: makeExpected({result: 10}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(1), valueNode([1, 2]), valueNode(3)],
+      call: 'CHOOSE',
+    }),
+    description: 'CHOOSE returns an array value',
+    expected: makeExpected({result: [1, 2]}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(1), valueNode(5), {error: 'Unexpected evaluation'}],
+      call: 'CHOOSE',
+    }),
+    description: 'CHOOSE does not evaluate unselected values',
+    expected: makeExpected({result: 5}),
+  },
+  {
+    args: makeArgs({args: [valueNode(1)], call: 'CHOOSE'}),
+    description: 'CHOOSE requires an index and a value',
+    error: 'ExpectedIndexAndValueForChooseFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode(0.5), valueNode(1)], call: 'CHOOSE'}),
+    description: 'CHOOSE rejects an index below one',
+    error: 'ExpectedIndexWithinValuesForChooseFunctionEvaluation',
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(3), valueNode(1), valueNode(2)],
+      call: 'CHOOSE',
+    }),
+    description: 'CHOOSE rejects an index above the value count',
+    error: 'ExpectedIndexWithinValuesForChooseFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode('1'), valueNode(1)], call: 'CHOOSE'}),
+    description: 'CHOOSE rejects a non-numeric index',
     error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
   },
   {
@@ -404,6 +468,51 @@ const tests = [
     error: 'ExpectedAtMostTwoArgsForRoundFunctionEvaluation',
   },
   {
+    args: makeArgs({args: [valueNode(2), valueNode(3)], call: 'POWER'}),
+    description: 'POWER raises a number to a power',
+    expected: makeExpected({result: 8}),
+  },
+  {
+    args: makeArgs({args: [valueNode(9), valueNode(0.5)], call: 'POWER'}),
+    description: 'POWER supports fractional exponents',
+    expected: makeExpected({result: 3}),
+  },
+  {
+    args: makeArgs({args: [valueNode(2), valueNode(-2)], call: 'POWER'}),
+    description: 'POWER supports negative exponents',
+    expected: makeExpected({result: 0.25}),
+  },
+  {
+    args: makeArgs({args: [valueNode(true), valueNode(2)], call: 'POWER'}),
+    description: 'POWER converts boolean arguments to numbers',
+    expected: makeExpected({result: 1}),
+  },
+  {
+    args: makeArgs({args: [valueNode(2)], call: 'POWER'}),
+    description: 'POWER requires exactly two arguments',
+    error: 'ExpectedExactlyTwoArgumentsForPowerFunctionEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode('2'), valueNode(2)], call: 'POWER'}),
+    description: 'POWER rejects non-numeric arguments',
+    error: 'ExpectedBoolOrFiniteNumberForNumberConversion',
+  },
+  {
+    args: makeArgs({args: [valueNode(0), valueNode(-1)], call: 'POWER'}),
+    description: 'POWER rejects an infinite result',
+    error: 'ExpectedFinitePowerResultForFormulaEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode(-8), valueNode(0.5)], call: 'POWER'}),
+    description: 'POWER rejects a non-real result',
+    error: 'ExpectedFinitePowerResultForFormulaEvaluation',
+  },
+  {
+    args: makeArgs({args: [valueNode(1)], call: 'RAND'}),
+    description: 'RAND rejects arguments',
+    error: 'ExpectedNoArgumentsForRandFunctionEvaluation',
+  },
+  {
     args: makeArgs({
       args: [valueNode(3), valueNode(3)],
       call: 'RANDBETWEEN',
@@ -423,6 +532,22 @@ const tests = [
     }),
     description: 'RANDBETWEEN rejects reversed bounds',
     error: 'ExpectedOrderedBoundsForRandBetween',
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(-3), valueNode(-3)],
+      call: 'RANDBETWEEN',
+    }),
+    description: 'RANDBETWEEN supports negative bounds',
+    expected: makeExpected({result: -3}),
+  },
+  {
+    args: makeArgs({
+      args: [valueNode(0), valueNode(2 ** 48 - 1)],
+      call: 'RANDBETWEEN',
+    }),
+    description: 'RANDBETWEEN rejects bounds beyond the range limit',
+    error: 'ExpectedBoundsWithinRangeLimitForRandBetween',
   },
   {
     args: makeArgs({args: [valueNode(4)], call: 'DOUBLE'}),
@@ -453,4 +578,42 @@ tests.forEach(({args, description, error, expected}) => {
 
     return end();
   });
+});
+
+test('RAND returns a random number', (t, end) => {
+  t.mock.method(crypto, 'randomBytes', () => Buffer.from([64, 0, 0, 0, 0, 0]));
+
+  const res = method(makeArgs({args: [], call: 'RAND'}));
+
+  deepStrictEqual(res, makeExpected({result: 0.25}), 'Got random number');
+
+  return end();
+});
+
+test('RANDBETWEEN picks a random integer in the bounds', (t, end) => {
+  const randomInt = t.mock.method(crypto, 'randomInt', () => 3);
+
+  const res = method(makeArgs({
+    args: [valueNode(1), valueNode(7)],
+    call: 'RANDBETWEEN',
+  }));
+
+  deepStrictEqual(randomInt.mock.calls[0].arguments, [7], 'Got span of 7');
+  deepStrictEqual(res, makeExpected({result: 4}), 'Got random integer');
+
+  return end();
+});
+
+test('RANDBETWEEN supports bounds at the range limit', (t, end) => {
+  const high = 2 ** 48 - 2;
+
+  const {result} = method(makeArgs({
+    args: [valueNode(0), valueNode(high)],
+    call: 'RANDBETWEEN',
+  }));
+
+  deepStrictEqual(Number.isInteger(result), true, 'Got integer');
+  deepStrictEqual(result >= 0 && result <= high, true, 'Got value in bounds');
+
+  return end();
 });

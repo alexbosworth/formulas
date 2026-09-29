@@ -101,6 +101,49 @@ const tests = [
     expected: makeExpected({result: 0}),
   },
   {
+    args: makeArgs({formula: 'power(2, 3) + 1'}),
+    description: 'Formula raises a number to a power',
+    expected: makeExpected({result: 9}),
+  },
+  {
+    args: makeArgs({formula: 'choose(2, 10, 20, 30) + 1'}),
+    description: 'Formula chooses a value by index',
+    expected: makeExpected({result: 21}),
+  },
+  {
+    args: makeArgs({formula: 'choose(1, 5, 1 / 0)'}),
+    description: 'Formula does not evaluate unchosen values',
+    expected: makeExpected({result: 5}),
+  },
+  {
+    args: makeArgs({
+      constants: {high: [4, 5], low: [1, 2]},
+      formula: 'sum(choose(2, LOW, HIGH))',
+    }),
+    description: 'Formula sums a chosen array constant',
+    expected: makeExpected({result: 9}),
+  },
+  {
+    args: makeArgs({formula: 'and(rand() >= 0, rand() < 1)'}),
+    description: 'Formula generates a random number from zero to one',
+    expected: makeExpected({result: 1}),
+  },
+  {
+    args: makeArgs({formula: '1 + 2 * 3 ^ 2'}),
+    description: 'Formula evaluates exponentiation before multiplication',
+    expected: makeExpected({result: 19}),
+  },
+  {
+    args: makeArgs({formula: '2 ^ 3 ^ 2'}),
+    description: 'Formula evaluates exponentiation from left to right',
+    expected: makeExpected({result: 64}),
+  },
+  {
+    args: makeArgs({formula: '-2 ^ 2'}),
+    description: 'Formula applies negation before exponentiation',
+    expected: makeExpected({result: 4}),
+  },
+  {
     args: makeArgs({constants: {values: [1, 2]}, formula: 'VALUES'}),
     description: 'Array constant cannot be returned as formula output',
     error: 'ExpectedFormulaOutputAsBooleanOrFiniteNumber',

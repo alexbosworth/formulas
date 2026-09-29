@@ -41,7 +41,7 @@ const tests = [
     expected: makeExpected({}),
   },
   {
-    args: makeArgs({formula: '+ - * / < > = <> <= >= ( ) ,'}),
+    args: makeArgs({formula: '+ - * / ^ < > = <> <= >= ( ) ,'}),
     description: 'Operators, parentheses, and comma are tokenized',
     expected: makeExpected({
       tokens: [
@@ -49,6 +49,7 @@ const tests = [
         {type: 'operator', value: '-'},
         {type: 'operator', value: '*'},
         {type: 'operator', value: '/'},
+        {type: 'operator', value: '^'},
         {type: 'operator', value: '<'},
         {type: 'operator', value: '>'},
         {type: 'operator', value: '='},

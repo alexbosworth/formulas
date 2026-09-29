@@ -12,7 +12,7 @@ const isQuote = value => value === '"' || value === "'";
 const isWhitespace = value => /\s/.test(value);
 const maxFormulaLength = 8192;
 const nextTwoChars = (formula, pos) => formula.slice(pos, pos + 2);
-const singleCharacterOperators = '+-*/<>=';
+const singleCharacterOperators = '+-*/<>=^';
 const twoCharacterOperators = ['<>', '<=', '>='];
 
 /** Convert a formula string into tokens

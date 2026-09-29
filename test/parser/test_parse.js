@@ -113,6 +113,47 @@ const tests = [
     }),
   },
   {
+    args: makeArgs({tokens: tokensFor('2 * 3 ^ 2')}),
+    description: 'Exponentiation is parsed before multiplication',
+    expected: makeExpected({
+      tree: binaryNode({
+        left: numberNode(2),
+        op: '*',
+        right: binaryNode({
+          left: numberNode(3),
+          op: '^',
+          right: numberNode(2),
+        }),
+      }),
+    }),
+  },
+  {
+    args: makeArgs({tokens: tokensFor('2 ^ 3 ^ 2')}),
+    description: 'Exponentiation is parsed from left to right',
+    expected: makeExpected({
+      tree: binaryNode({
+        left: binaryNode({
+          left: numberNode(2),
+          op: '^',
+          right: numberNode(3),
+        }),
+        op: '^',
+        right: numberNode(2),
+      }),
+    }),
+  },
+  {
+    args: makeArgs({tokens: tokensFor('-2 ^ -2')}),
+    description: 'Unary operators are parsed before exponentiation',
+    expected: makeExpected({
+      tree: binaryNode({
+        left: unaryNode({argument: numberNode(2), op: '-'}),
+        op: '^',
+        right: unaryNode({argument: numberNode(2), op: '-'}),
+      }),
+    }),
+  },
+  {
     args: makeArgs({tokens: tokensFor('-(1 + 2)')}),
     description: 'Grouped unary expression is parsed as expected',
     expected: makeExpected({

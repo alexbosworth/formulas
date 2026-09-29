@@ -80,8 +80,8 @@ console.log(result); // 1
 `AVERAGE`, `COUNT`, `MAX`, `MIN`, and `SUM` accept one or more scalar or array
 arguments. `COUNT` ignores non-number values. `COUNT`, `MAX`, `MIN`, and `SUM`
 return zero for empty arrays. `AVERAGE` requires at least one value, and
-`MEDIAN` requires one non-empty array. Other built-in functions expect scalar
-arguments.
+`MEDIAN` requires one non-empty array. `CHOOSE` can select an array value.
+Other built-in functions expect scalar arguments.
 
 ## Custom functions
 
@@ -117,6 +117,7 @@ the following operators:
 | Operation | Operators |
 | --- | --- |
 | Unary | `+`, `-` |
+| Exponentiation | `^` |
 | Multiplication and division | `*`, `/` |
 | Addition and subtraction | `+`, `-` |
 | Comparison | `>`, `<`, `>=`, `<=`, `=`, `<>` |
@@ -138,6 +139,7 @@ console.log(result); // 1
 | `ABS(value)` | Return the absolute value |
 | `AND(value, ...)` | Return true when every value is true |
 | `AVERAGE(value, ...)` | Return the average of scalar or array values |
+| `CHOOSE(index, value, ...)` | Return the value at a one-based index |
 | `COUNT(value, ...)` | Count numeric scalar or array values |
 | `EXACT(string1, string2)` | Compare two strings exactly |
 | `IF(condition, ifTrue, ifFalse)` | Return the selected result |
@@ -146,6 +148,8 @@ console.log(result); // 1
 | `MIN(value, ...)` | Return the smallest scalar or array value |
 | `NOT(value)` | Reverse a boolean value |
 | `OR(value, ...)` | Return true when any value is true |
+| `POWER(number, power)` | Raise a number to a power |
+| `RAND()` | Return a random number from 0 up to but not including 1 |
 | `RANDBETWEEN(low, high)` | Return a random integer within inclusive bounds |
 | `ROUND(value[, places])` | Round a value; places defaults to zero |
 | `SUM(value, ...)` | Add scalar or array values |
@@ -166,6 +170,9 @@ const {result} = evaluateFormula({
 
 console.log(result); // 100
 ```
+
+`IF` and `CHOOSE` only evaluate the selected value, so
+`CHOOSE(1, 5, 1 / 0)` returns `5`.
 
 `EXACT` compares string case and spacing:
 

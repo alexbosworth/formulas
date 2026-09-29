@@ -1,7 +1,11 @@
+const crypto = require('node:crypto');
+
 const calculateAverage = require('../values').calculateAverage;
 const calculateMedian = require('../values').calculateMedian;
 const countNumbers = require('../values').countNumbers;
 const normalizeResult = require('../values').normalizeResult;
+const raiseToPower = require('../values').raiseToPower;
+const randomFraction = require('../values').randomFraction;
 const roundToPlaces = require('../values').roundToPlaces;
 const toBoolean = require('../values').toBoolean;
 const toNumber = require('../values').toNumber;
@@ -17,13 +21,15 @@ const expectedAbsArgumentsCount = 1;
 const expectedExactArgumentsCount = 2;
 const expectedNotArgumentsCount = 1;
 const expectedIfArgumentsCount = 3;
+const expectedMinChooseArgumentsCount = 2;
 const expectedMaxMedianArgumentsCount = 1;
 const expectedMaxRoundArgumentsCount = 2;
+const expectedPowerArgumentsCount = 2;
+const expectedRandArgumentsCount = 0;
 const expectedRandBetweenArgumentsCount = 2;
-const {floor} = Math;
 const {max} = Math;
+const maxRandBetweenSpan = 2 ** 48 - 1;
 const {min} = Math;
-const randomNum = (low, high) => floor(Math.random() * (high - low + 1) + low);
 const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
 const {trunc} = Math;
 
@@ -77,6 +83,22 @@ module.exports = ({args, call, evaluate, functions}) => {
     }
 
     return {result: calculateAverage({values: averageValues}).average};
+
+  // Evaluate and return the value selected by a one-based index
+  case 'CHOOSE':
+    if (args.length < expectedMinChooseArgumentsCount) {
+      throw new Error('ExpectedIndexAndValueForChooseFunctionEvaluation');
+    }
+
+    const [chooseIndex, ...choices] = args;
+
+    const chosen = choices[trunc(asNumber(evaluate(chooseIndex))) - 1];
+
+    if (!chosen) {
+      throw new Error('ExpectedIndexWithinValuesForChooseFunctionEvaluation');
+    }
+
+    return {result: evaluate(chosen)};
 
   // Count numeric scalar or array values
   case 'COUNT':
@@ -184,6 +206,24 @@ module.exports = ({args, call, evaluate, functions}) => {
 
     return {result: args.some(argument => asBool(evaluate(argument)))};
 
+  // Raise a number to the passed power
+  case 'POWER':
+    if (args.length !== expectedPowerArgumentsCount) {
+      throw new Error('ExpectedExactlyTwoArgumentsForPowerFunctionEvaluation');
+    }
+
+    const [base, exponent] = args.map(evaluate);
+
+    return {result: raiseToPower({base, exponent}).power};
+
+  // Return a random number from zero up to but not including one
+  case 'RAND':
+    if (args.length !== expectedRandArgumentsCount) {
+      throw new Error('ExpectedNoArgumentsForRandFunctionEvaluation');
+    }
+
+    return {result: randomFraction().fraction};
+
   // Return a random integer between the passed arguments
   case 'RANDBETWEEN': {
     if (args.length !== expectedRandBetweenArgumentsCount) {
@@ -196,7 +236,15 @@ module.exports = ({args, call, evaluate, functions}) => {
       throw new Error('ExpectedOrderedBoundsForRandBetween');
     }
 
-    return {result: randomNum(low, high)};
+    // Count the integers that can be picked between the bounds
+    const span = high - low + 1;
+
+    // Exit with error when the span is beyond the secure random number limit
+    if (span > maxRandBetweenSpan) {
+      throw new Error('ExpectedBoundsWithinRangeLimitForRandBetween');
+    }
+
+    return {result: low + crypto.randomInt(span)};
   }
 
   // Round a value to the passed number of decimal places

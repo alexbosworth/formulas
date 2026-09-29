@@ -5,6 +5,8 @@ module.exports = {
   calculateMedian: require('./calculate_median'),
   countNumbers: require('./count_numbers'),
   normalizeResult: require('./normalize_result'),
+  raiseToPower: require('./raise_to_power'),
+  randomFraction: require('./random_fraction'),
   roundToPlaces: require('./round_to_places'),
   toBoolean: require('./to_boolean'),
   toNumber: require('./to_number'),

@@ -1,4 +1,5 @@
 const compareOrdered = require('../values').compareOrdered;
+const raiseToPower = require('../values').raiseToPower;
 const toNumber = require('../values').toNumber;
 const valuesEqual = require('../values').valuesEqual;
 
@@ -42,6 +43,9 @@ module.exports = ({evaluate, node}) => {
     }
 
     return {result: numberValue(left) / divisor};
+
+  case '^':
+    return {result: raiseToPower({base: left, exponent: right}).power};
 
   case '>':
   case '<':
